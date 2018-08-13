@@ -18,7 +18,7 @@ public class Producer implements Runnable {
             BufferedReader br = new BufferedReader(new FileReader(inputFile));
             String line;
             while ((line = br.readLine()) != null) {
-                tempStorage.put(line);
+                tempStorage.put(line + "\n");
             }
             GlobalState.processingFinished();
         } catch (java.io.IOException e) {

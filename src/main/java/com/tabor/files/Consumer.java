@@ -1,10 +1,8 @@
 package com.tabor.files;
 
-import java.util.Date;
-
 public class Consumer implements Runnable {
     private final TempStorage tempStorage;
-    private FileManager fileManager;
+    private final FileManager fileManager;
 
     public Consumer(TempStorage tempStorage, FileManager fileManager) {
         this.tempStorage = tempStorage;
@@ -13,9 +11,8 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("start " + new Date(System.currentTimeMillis()));
         Chunk chunk = new Chunk();
-        while (GlobalState.isProcessing()) {
+        while (shouldConsume()) {
             String line = tempStorage.take();
             if (line.contains("ORDER")) {
                 fileManager.save(chunk);
@@ -23,7 +20,9 @@ public class Consumer implements Runnable {
             }
             chunk.add(line);
         }
-        System.out.println("that is all " + new Date(System.currentTimeMillis()));
+    }
 
+    private boolean shouldConsume() {
+        return GlobalState.isProcessing() || tempStorage.isNotEmpty();
     }
 }

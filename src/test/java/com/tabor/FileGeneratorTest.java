@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class FileGeneratorTest {
 
     @Test
-    public void generateCSV_atGivenLocation() throws FileNotFoundException, UnsupportedEncodingException {
+    public void generateCSV() throws FileNotFoundException, UnsupportedEncodingException {
         try (PrintWriter writer = new PrintWriter("file.csv", "UTF-8")) {
             for (int i = 0; i < 100_000; i++) {
                 writer.println(String.format("ORDER,%s,...", i));

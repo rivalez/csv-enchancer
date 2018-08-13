@@ -4,9 +4,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 public class TempStorage {
-    private BlockingQueue<String> queue = new ArrayBlockingQueue<>(100_000);
+    private BlockingQueue<String> queue = new ArrayBlockingQueue<>(200_000);
 
-    public void put(String line) {
+    void put(String line) {
         try {
             queue.put(line);
         } catch (InterruptedException e) {
@@ -15,7 +15,7 @@ public class TempStorage {
         }
     }
 
-    public String take() {
+    String take() {
             try {
                 return queue.take();
             } catch (InterruptedException e) {
@@ -23,6 +23,10 @@ public class TempStorage {
                 e.printStackTrace();
             }
         return "";
+    }
+
+    public boolean isNotEmpty() {
+        return queue.size() != 0;
     }
 
 }

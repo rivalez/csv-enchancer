@@ -1,28 +1,43 @@
 package com.tabor.files;
 
+import com.tabor.storage.BalancedSave;
+import com.tabor.storage.RandomSave;
+import com.tabor.storage.StorageTemplate;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 
 public class CSVFileManager implements FileManager {
+    private static final String FILE = "file";
     private List<AvailableFile> storage = new ArrayList<>();
+    private StorageTemplate storageTemplate;
 
     @Override
     public void save(Chunk chunk) {
-        AvailableFile availableFile = storage.get(ThreadLocalRandom.current().nextInt(0,10));
-        availableFile.write(chunk);
+        storageTemplate.save(chunk);
     }
 
     @Override
-    public void initStorage(String dest, int amount) {
-        String file = "file";
-        for (int i = 0; i < amount; i++) {
+    public void initStorage(String dest, int amount, long lines) {
+        IntStream.range(0, amount).forEach(nr -> {
             try {
-                storage.add(new AvailableFile(file + i + ".csv", dest));
+                storage.add(new AvailableFile(FILE + nr + ".csv", dest));
             } catch (IOException e) {
-                throw new RuntimeException("unable to initialize processing storage");
+                throw new RuntimeException("unable to initialize processing storage", e);
             }
+        });
+        setSavingStrategy(lines);
+    }
+
+    private void setSavingStrategy(long lines) {
+        if (lines > 0) {
+            final BalancedSave balancedSave = new BalancedSave(storage, lines);
+            balancedSave.init();
+            this.storageTemplate = balancedSave;
+        } else {
+            storageTemplate = new RandomSave(storage);
         }
     }
 }

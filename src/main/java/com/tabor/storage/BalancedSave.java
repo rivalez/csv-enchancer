@@ -1,7 +1,7 @@
 package com.tabor.storage;
 
 import com.tabor.files.AvailableFile;
-import com.tabor.files.Chunk;
+import com.tabor.model.Order;
 
 import java.util.List;
 
@@ -20,13 +20,13 @@ public class BalancedSave extends StorageTemplate {
     }
 
     @Override
-    public void save(Chunk chunk) {
-        long lines = chunk.getLines().count();
+    public void save(Order order) {
+        long lines = order.getLines().count();
         AvailableFile availableFile = storage.stream()
                 .filter(file -> file.canAdd(lines))
                 .findFirst()
                 .orElse(storage.get(0));
         availableFile.decreaseFreeLines(lines);
-        availableFile.write(chunk);
+        availableFile.write(order);
     }
 }

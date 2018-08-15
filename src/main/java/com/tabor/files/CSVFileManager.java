@@ -1,22 +1,26 @@
 package com.tabor.files;
 
+import com.tabor.model.Order;
 import com.tabor.storage.BalancedSave;
 import com.tabor.storage.RandomSave;
 import com.tabor.storage.StorageTemplate;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class CSVFileManager implements FileManager {
     private static final String FILE = "file";
-    private List<AvailableFile> storage = new ArrayList<>();
+    private List<AvailableFile> storage;
     private StorageTemplate storageTemplate;
 
+    public CSVFileManager(List<AvailableFile> storage) {
+        this.storage = storage;
+    }
+
     @Override
-    public void save(Chunk chunk) {
-        storageTemplate.save(chunk);
+    public void save(Order order) {
+        storageTemplate.save(order);
     }
 
     @Override

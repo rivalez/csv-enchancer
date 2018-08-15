@@ -10,4 +10,8 @@ import java.util.function.Predicate;
 @FunctionalInterface
 public interface Validator<T> extends Predicate<T> {
 
+    default boolean areArgsComplete(String args[]) {
+        return args.length == 3;
+    }
+
 }

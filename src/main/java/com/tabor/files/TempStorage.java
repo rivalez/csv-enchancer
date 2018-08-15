@@ -2,16 +2,18 @@ package com.tabor.files;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Logger;
 
 public class TempStorage {
+    private static final String EMPTY = "";
+    private final Logger logger = Logger.getLogger(TempStorage.class.getName());
     private BlockingQueue<String> queue = new ArrayBlockingQueue<>(200_000);
 
     void put(String line) {
         try {
             queue.put(line);
         } catch (InterruptedException e) {
-            //any kind of logging
-            e.printStackTrace();
+            logger.warning(e.getMessage());
         }
     }
 
@@ -19,10 +21,9 @@ public class TempStorage {
             try {
                 return queue.take();
             } catch (InterruptedException e) {
-                //any kind of logging
-                e.printStackTrace();
+                logger.warning(e.getMessage());
             }
-        return "";
+        return EMPTY;
     }
 
     public boolean isNotEmpty() {

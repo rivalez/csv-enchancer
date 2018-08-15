@@ -1,6 +1,10 @@
 package com.tabor.files;
 
+import com.tabor.model.Order;
+import com.tabor.state.GlobalState;
+
 public class Consumer implements Runnable {
+    private static final String ORDER = "ORDER";
     private final TempStorage tempStorage;
     private final FileManager fileManager;
 
@@ -11,15 +15,19 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        Chunk chunk = new Chunk();
+        Order order = new Order();
         while (shouldConsume()) {
             String line = tempStorage.take();
-            if (line.contains("ORDER")) {
-                fileManager.save(chunk);
-                chunk = new Chunk();
+            if (isNewOrder(line)) {
+                fileManager.save(order);
+                order = new Order();
             }
-            chunk.add(line);
+            order.add(line);
         }
+    }
+
+    private boolean isNewOrder(String line) {
+        return line.contains(ORDER);
     }
 
     private boolean shouldConsume() {

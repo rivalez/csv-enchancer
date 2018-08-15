@@ -15,8 +15,7 @@ public class FileSizeScannerTest {
     @Test
     public void shouldCountFileLines() {
         //act
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("dest/testfile.csv").getFile());
+        File file = new File("src/test/resources/dest/testfile.csv");
         long lines = fileSizeScanner.getLines(file.getAbsolutePath());
         //assert
         Assert.assertEquals(5, lines);

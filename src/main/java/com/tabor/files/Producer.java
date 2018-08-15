@@ -1,9 +1,13 @@
 package com.tabor.files;
 
+import com.tabor.state.GlobalState;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.logging.Logger;
 
 public class Producer implements Runnable {
+    private final Logger logger = Logger.getLogger(Producer.class.getName());
     private final TempStorage tempStorage;
     private final String inputFile;
 
@@ -15,6 +19,7 @@ public class Producer implements Runnable {
     @Override
     public void run() {
         try {
+            logger.info("Start processing file...");
             BufferedReader br = new BufferedReader(new FileReader(inputFile));
             String line;
             while ((line = br.readLine()) != null) {
@@ -22,7 +27,7 @@ public class Producer implements Runnable {
             }
             GlobalState.processingFinished();
         } catch (java.io.IOException e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.tabor.files;
 
+import com.tabor.model.Order;
 import com.tabor.storage.BalancedSave;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,7 +26,7 @@ public class BalancedSaveTest {
         files = IntStream.range(0, 10)
                         .mapToObj(f -> {
                             try {
-                                return new AvailableFile("file " + f,"path " + f);
+                                return new AvailableFile("file" + f,"path" + f);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -37,7 +38,7 @@ public class BalancedSaveTest {
 
 
     @Test
-    public void shouldDivideSpaceEqually() {
+    public void shouldDivideSpaceEqually_by10_000PerFile() {
         //act
         balancedSave.init();
         //assert
@@ -45,20 +46,19 @@ public class BalancedSaveTest {
                 Assert.assertEquals(10_000, f.getFreeLines()));
     }
     @Test
-    public void shouldDecreaseAmountOfFreeSpace() {
+    public void shouldDecreaseAmountOfFreeSpace_by10_000() {
         //assign
-        Chunk chunk = new Chunk();
+        Order order = new Order();
         Stream.generate(() -> "\n").limit(10_000)
                 .collect(Collectors.toList())
-                .forEach(chunk::add);
+                .forEach(order::add);
         //act
         balancedSave.init();
-        balancedSave.save(chunk);
+        balancedSave.save(order);
         //assert
         AvailableFile firstFile = files.get(0);
         AvailableFile nextFile = files.get(1);
         Assert.assertEquals(0, firstFile.getFreeLines());
         Assert.assertEquals(10_000, nextFile.getFreeLines());
-
     }
 }

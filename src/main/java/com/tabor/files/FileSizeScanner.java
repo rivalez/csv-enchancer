@@ -10,6 +10,7 @@ public class FileSizeScanner {
 
     public long getLines(String file) {
         try {
+            logger.info("Counting number of lines");
             return Files.lines(Paths.get(file)).count();
         } catch (IOException e) {
             logger.warning(e.getMessage());

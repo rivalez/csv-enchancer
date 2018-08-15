@@ -1,7 +1,7 @@
 package com.tabor.storage;
 
-import com.tabor.files.Chunk;
+import com.tabor.model.Order;
 
 public abstract class StorageTemplate {
-    public abstract void save(Chunk chunk);
+    public abstract void save(Order order);
 }
